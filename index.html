@@ -20,6 +20,19 @@ body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 </head>
 <body>
 <div id="root"></div>
+<script>
+// Clear any stale service workers from previous deploys
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs) {
+    regs.forEach(function(r) { r.unregister(); });
+  }).then(function() {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+window.onerror = function(msg) {
+  document.getElementById("root").textContent = "Error: " + msg;
+};
+</script>
 <script src="lib/react.min.js"></script>
 <script src="lib/react-dom.min.js"></script>
 <script>
@@ -336,13 +349,12 @@ h(Btn, { onClick: function() { setScreen(“gallery”); }, title: “Gallery”
 );
 }
 
-ReactDOM.createRoot(document.getElementById(“root”)).render(React.createElement(App));
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").catch(function() {});
+if (typeof React === “undefined” || typeof ReactDOM === “undefined”) {
+  document.getElementById(“root”).textContent = “Error: React failed to load.”;
+} else {
+  ReactDOM.createRoot(document.getElementById(“root”)).render(React.createElement(App));
 }
 </script>
+
 </body>
 </html>
