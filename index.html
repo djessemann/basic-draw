@@ -40,49 +40,49 @@ window.onerror = function(msg) {
 var h = React.createElement;
 var useState = React.useState, useRef = React.useRef, useCallback = React.useCallback, useEffect = React.useEffect;
 
-var FONT = “’SF Mono’, ‘Menlo’, ‘Consolas’, ‘Liberation Mono’, monospace”;
-var COLORS = [”#1a1a1a”,”#e74c3c”,”#e67e22”,”#f1c40f”,”#2ecc71”,”#3498db”,”#9b59b6”,”#e91e8e”,”#FFFFFF”];
+var FONT = "'SF Mono', 'Menlo', 'Consolas', 'Liberation Mono', monospace";
+var COLORS = ["#1a1a1a","#e74c3c","#e67e22","#f1c40f","#2ecc71","#3498db","#9b59b6","#e91e8e","#FFFFFF"];
 var SIZES = [4, 10, 22];
 var CANVAS_W = 1080;
 var CANVAS_H = 1440;
-var GALLERY_KEY = “simple-draw-gallery”;
+var GALLERY_KEY = "simple-draw-gallery";
 
 /* ── icons ── */
 function Icon(props) {
-return h(“svg”, { width: props.size || 22, height: props.size || 22, viewBox: “0 0 24 24”, fill: “none”, stroke: “currentColor”, strokeWidth: 2, strokeLinecap: “round”, strokeLinejoin: “round” }, props.children);
+return h("svg", { width: props.size || 22, height: props.size || 22, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" }, props.children);
 }
-function UndoIcon() { return h(Icon, null, h(“path”, { d: “M3 10h13a4 4 0 0 1 0 8H9” }), h(“polyline”, { points: “7 14 3 10 7 6” })); }
-function RedoIcon() { return h(Icon, null, h(“path”, { d: “M21 10H8a4 4 0 0 0 0 8h7” }), h(“polyline”, { points: “17 14 21 10 17 6” })); }
-function SaveIcon() { return h(Icon, null, h(“rect”, { x: 5, y: 3, width: 14, height: 18, rx: 1 }), h(“path”, { d: “M9 3v6h6V3” }), h(“line”, { x1: 9, y1: 14, x2: 15, y2: 14 }), h(“line”, { x1: 9, y1: 17, x2: 13, y2: 17 }), h(“circle”, { cx: 12, cy: 7, r: 0.5, fill: “currentColor” })); }
-function ShareIcon() { return h(Icon, null, h(“path”, { d: “M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5” }), h(“polyline”, { points: “12 3 12 15” }), h(“polyline”, { points: “8 7 12 3 16 7” })); }
-function PlusIcon() { return h(Icon, null, h(“line”, { x1: 12, y1: 5, x2: 12, y2: 19 }), h(“line”, { x1: 5, y1: 12, x2: 19, y2: 12 })); }
-function GridIcon() { return h(Icon, null, h(“rect”, { x: 3, y: 3, width: 7, height: 7, rx: 1 }), h(“rect”, { x: 14, y: 3, width: 7, height: 7, rx: 1 }), h(“rect”, { x: 3, y: 14, width: 7, height: 7, rx: 1 }), h(“rect”, { x: 14, y: 14, width: 7, height: 7, rx: 1 })); }
-function BackIcon() { return h(Icon, null, h(“polyline”, { points: “15 18 9 12 15 6” })); }
-function TrashIcon() { return h(Icon, null, h(“polyline”, { points: “3 6 5 6 21 6” }), h(“path”, { d: “M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6” }), h(“path”, { d: “M10 11v6” }), h(“path”, { d: “M14 11v6” }), h(“path”, { d: “M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2” })); }
+function UndoIcon() { return h(Icon, null, h("path", { d: "M3 10h13a4 4 0 0 1 0 8H9" }), h("polyline", { points: "7 14 3 10 7 6" })); }
+function RedoIcon() { return h(Icon, null, h("path", { d: "M21 10H8a4 4 0 0 0 0 8h7" }), h("polyline", { points: "17 14 21 10 17 6" })); }
+function SaveIcon() { return h(Icon, null, h("rect", { x: 5, y: 3, width: 14, height: 18, rx: 1 }), h("path", { d: "M9 3v6h6V3" }), h("line", { x1: 9, y1: 14, x2: 15, y2: 14 }), h("line", { x1: 9, y1: 17, x2: 13, y2: 17 }), h("circle", { cx: 12, cy: 7, r: 0.5, fill: "currentColor" })); }
+function ShareIcon() { return h(Icon, null, h("path", { d: "M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5" }), h("polyline", { points: "12 3 12 15" }), h("polyline", { points: "8 7 12 3 16 7" })); }
+function PlusIcon() { return h(Icon, null, h("line", { x1: 12, y1: 5, x2: 12, y2: 19 }), h("line", { x1: 5, y1: 12, x2: 19, y2: 12 })); }
+function GridIcon() { return h(Icon, null, h("rect", { x: 3, y: 3, width: 7, height: 7, rx: 1 }), h("rect", { x: 14, y: 3, width: 7, height: 7, rx: 1 }), h("rect", { x: 3, y: 14, width: 7, height: 7, rx: 1 }), h("rect", { x: 14, y: 14, width: 7, height: 7, rx: 1 })); }
+function BackIcon() { return h(Icon, null, h("polyline", { points: "15 18 9 12 15 6" })); }
+function TrashIcon() { return h(Icon, null, h("polyline", { points: "3 6 5 6 21 6" }), h("path", { d: "M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" }), h("path", { d: "M10 11v6" }), h("path", { d: "M14 11v6" }), h("path", { d: "M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" })); }
 
 /* ── drawing helpers ── */
 function drawStroke(ctx, s) {
 if (s.points.length < 2) return;
 ctx.beginPath();
-ctx.strokeStyle = s.eraser ? “#FFFFFF” : s.color;
+ctx.strokeStyle = s.eraser ? "#FFFFFF" : s.color;
 ctx.lineWidth = s.size;
-ctx.lineCap = “round”;
-ctx.lineJoin = “round”;
-ctx.globalCompositeOperation = s.eraser ? “destination-out” : “source-over”;
+ctx.lineCap = "round";
+ctx.lineJoin = "round";
+ctx.globalCompositeOperation = s.eraser ? "destination-out" : "source-over";
 ctx.moveTo(s.points[0].x, s.points[0].y);
 for (var i = 1; i < s.points.length; i++) ctx.lineTo(s.points[i].x, s.points[i].y);
 ctx.stroke();
-ctx.globalCompositeOperation = “source-over”;
+ctx.globalCompositeOperation = "source-over";
 }
 
 function redrawAll(ctx, strokes) {
-ctx.fillStyle = “#FFFFFF”;
+ctx.fillStyle = "#FFFFFF";
 ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
 strokes.forEach(function(s) { drawStroke(ctx, s); });
 }
 
 function loadGallery() {
-try { return JSON.parse(localStorage.getItem(GALLERY_KEY) || “[]”); } catch(e) { return []; }
+try { return JSON.parse(localStorage.getItem(GALLERY_KEY) || "[]"); } catch(e) { return []; }
 }
 function saveGalleryData(g) {
 localStorage.setItem(GALLERY_KEY, JSON.stringify(g));
@@ -91,37 +91,37 @@ localStorage.setItem(GALLERY_KEY, JSON.stringify(g));
 /* ── button component ── */
 function Btn(props) {
 var _p = useState(false), pressed = _p[0], setPressed = _p[1];
-return h(“div”, {
+return h("div", {
 onClick: props.onClick,
 onPointerDown: function() { setPressed(true); },
 onPointerUp: function() { setPressed(false); },
 onPointerLeave: function() { setPressed(false); },
 title: props.title,
 style: Object.assign({
-display: “flex”, alignItems: “center”, justifyContent: “center”,
+display: "flex", alignItems: "center", justifyContent: "center",
 width: 44, height: 44,
-background: pressed ? “#1a1a1a” : “#fff”,
-color: pressed ? “#fff” : “#1a1a1a”,
-border: “2px solid #1a1a1a”,
+background: pressed ? "#1a1a1a" : "#fff",
+color: pressed ? "#fff" : "#1a1a1a",
+border: "2px solid #1a1a1a",
 borderRadius: 4,
-cursor: “pointer”,
-userSelect: “none”,
+cursor: "pointer",
+userSelect: "none",
 fontFamily: FONT,
 fontSize: 13,
-boxSizing: “border-box”
+boxSizing: "border-box"
 }, props.style)
 }, props.children);
 }
 
 /* ── share/download helper ── */
 function shareOrDownload(blob, filename) {
-var file = new File([blob], filename, { type: “image/png” });
-if (typeof navigator.share === “function” && typeof navigator.canShare === “function” && navigator.canShare({ files: [file] })) {
-navigator.share({ files: [file], title: “Drawing” }).catch(function() {});
+var file = new File([blob], filename, { type: "image/png" });
+if (typeof navigator.share === "function" && typeof navigator.canShare === "function" && navigator.canShare({ files: [file] })) {
+navigator.share({ files: [file], title: "Drawing" }).catch(function() {});
 } else {
 var url = URL.createObjectURL(blob);
-var a = document.createElement(“a”);
-a.href = url; a.download = filename; a.style.display = “none”;
+var a = document.createElement("a");
+a.href = url; a.download = filename; a.style.display = "none";
 document.body.appendChild(a); a.click();
 setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 500);
 }
@@ -129,7 +129,7 @@ setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); 
 
 /* ── main app ── */
 function App() {
-var _scr = useState(“draw”), screen = _scr[0], setScreen = _scr[1];
+var _scr = useState("draw"), screen = _scr[0], setScreen = _scr[1];
 var _gal = useState(loadGallery), gallery = _gal[0], setGallery = _gal[1];
 var _vi = useState(null), viewIdx = _vi[0], setViewIdx = _vi[1];
 
@@ -147,8 +147,8 @@ var _shf = useState(false), shareFlash = _shf[0], setShareFlash = _shf[1];
 var canvasEmpty = strokes.length === 0;
 
 useEffect(function() {
-if (screen === “draw” && canvasRef.current) {
-var ctx = canvasRef.current.getContext(“2d”);
+if (screen === "draw" && canvasRef.current) {
+var ctx = canvasRef.current.getContext("2d");
 redrawAll(ctx, strokes);
 }
 }, [screen]);
@@ -175,18 +175,18 @@ if (!drawing.current || !currentStroke) return;
 var p = getPos(e);
 var ns = { points: currentStroke.points.concat([p]), color: currentStroke.color, size: currentStroke.size, eraser: currentStroke.eraser };
 setCurrentStroke(ns);
-var ctx = canvasRef.current ? canvasRef.current.getContext(“2d”) : null;
+var ctx = canvasRef.current ? canvasRef.current.getContext("2d") : null;
 if (ctx && ns.points.length >= 2) {
 ctx.beginPath();
-ctx.strokeStyle = ns.eraser ? “#FFFFFF” : ns.color;
+ctx.strokeStyle = ns.eraser ? "#FFFFFF" : ns.color;
 ctx.lineWidth = ns.size;
-ctx.lineCap = “round”; ctx.lineJoin = “round”;
-ctx.globalCompositeOperation = ns.eraser ? “destination-out” : “source-over”;
+ctx.lineCap = "round"; ctx.lineJoin = "round";
+ctx.globalCompositeOperation = ns.eraser ? "destination-out" : "source-over";
 var pts = ns.points;
 ctx.moveTo(pts[pts.length - 2].x, pts[pts.length - 2].y);
 ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
 ctx.stroke();
-ctx.globalCompositeOperation = “source-over”;
+ctx.globalCompositeOperation = "source-over";
 }
 }, [getPos, currentStroke]);
 
@@ -204,7 +204,7 @@ if (strokes.length === 0) return;
 var last = strokes[strokes.length - 1];
 setStrokes(function(prev) { return prev.slice(0, -1); });
 setRedoStack(function(prev) { return prev.concat([last]); });
-var ctx = canvasRef.current ? canvasRef.current.getContext(“2d”) : null;
+var ctx = canvasRef.current ? canvasRef.current.getContext("2d") : null;
 if (ctx) redrawAll(ctx, strokes.slice(0, -1));
 }, [strokes]);
 
@@ -214,7 +214,7 @@ var next = redoStack[redoStack.length - 1];
 setRedoStack(function(prev) { return prev.slice(0, -1); });
 setStrokes(function(prev) {
 var ns = prev.concat([next]);
-var ctx = canvasRef.current ? canvasRef.current.getContext(“2d”) : null;
+var ctx = canvasRef.current ? canvasRef.current.getContext("2d") : null;
 if (ctx) redrawAll(ctx, ns);
 return ns;
 });
@@ -222,7 +222,7 @@ return ns;
 
 var saveToGallery = useCallback(function() {
 if (canvasEmpty) return;
-var url = canvasRef.current.toDataURL(“image/png”);
+var url = canvasRef.current.toDataURL("image/png");
 if (!url) return;
 var entry = { id: Date.now(), image: url, date: new Date().toISOString() };
 var updated = [entry].concat(gallery);
@@ -238,8 +238,8 @@ setShareFlash(true);
 setTimeout(function() { setShareFlash(false); }, 800);
 canvasRef.current.toBlob(function(blob) {
 if (!blob) return;
-shareOrDownload(blob, “drawing-” + Date.now() + “.png”);
-}, “image/png”);
+shareOrDownload(blob, "drawing-" + Date.now() + ".png");
+}, "image/png");
 }, [canvasEmpty]);
 
 var newCanvas = useCallback(function() {
@@ -252,8 +252,8 @@ setConfirmNew(false);
 setErasing(false);
 setColor(COLORS[0]);
 setBrushSize(SIZES[1]);
-var ctx = canvasRef.current ? canvasRef.current.getContext(“2d”) : null;
-if (ctx) { ctx.fillStyle = “#FFFFFF”; ctx.fillRect(0, 0, CANVAS_W, CANVAS_H); }
+var ctx = canvasRef.current ? canvasRef.current.getContext("2d") : null;
+if (ctx) { ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, CANVAS_W, CANVAS_H); }
 }, [canvasEmpty, confirmNew]);
 
 var deleteFromGallery = useCallback(function(id) {
@@ -265,40 +265,40 @@ setViewIdx(null);
 
 var shareFromGallery = useCallback(function(dataUrl) {
 fetch(dataUrl).then(function(r) { return r.blob(); }).then(function(blob) {
-shareOrDownload(blob, “drawing-” + Date.now() + “.png”);
+shareOrDownload(blob, "drawing-" + Date.now() + ".png");
 });
 }, []);
 
 // ── GALLERY: single image view ──
-if (screen === “gallery” && viewIdx !== null && gallery[viewIdx]) {
+if (screen === "gallery" && viewIdx !== null && gallery[viewIdx]) {
 var item = gallery[viewIdx];
-return h(“div”, { style: { width: “100%”, height: “100dvh”, background: “#fff”, display: “flex”, flexDirection: “column”, overflow: “hidden”, fontFamily: FONT } },
-h(“div”, { style: { flexShrink: 0, display: “flex”, alignItems: “center”, justifyContent: “space-between”, padding: “10px 12px” } },
+return h("div", { style: { width: "100%", height: "100dvh", background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", fontFamily: FONT } },
+h("div", { style: { flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px" } },
 h(Btn, { onClick: function() { setViewIdx(null); }, style: { width: 36, height: 36 } }, h(BackIcon)),
-h(“div”, { style: { display: “flex”, gap: 8 } },
-h(Btn, { onClick: function() { shareFromGallery(item.image); }, title: “Download”, style: { width: 36, height: 36 } }, h(ShareIcon)),
-h(Btn, { onClick: function() { deleteFromGallery(item.id); }, title: “Delete”, style: { width: 36, height: 36 } }, h(TrashIcon))
+h("div", { style: { display: "flex", gap: 8 } },
+h(Btn, { onClick: function() { shareFromGallery(item.image); }, title: "Download", style: { width: 36, height: 36 } }, h(ShareIcon)),
+h(Btn, { onClick: function() { deleteFromGallery(item.id); }, title: "Delete", style: { width: 36, height: 36 } }, h(TrashIcon))
 )
 ),
-h(“div”, { style: { flex: 1, display: “flex”, alignItems: “center”, justifyContent: “center”, padding: 12, minHeight: 0 } },
-h(“img”, { src: item.image, alt: “”, style: { maxWidth: “100%”, maxHeight: “100%”, objectFit: “contain”, border: “2px solid #1a1a1a”, borderRadius: 4 } })
+h("div", { style: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, minHeight: 0 } },
+h("img", { src: item.image, alt: "", style: { maxWidth: "100%", maxHeight: "100%", objectFit: "contain", border: "2px solid #1a1a1a", borderRadius: 4 } })
 )
 );
 }
 
 // ── GALLERY: grid view ──
-if (screen === “gallery”) {
-return h(“div”, { style: { width: “100%”, height: “100dvh”, background: “#fff”, display: “flex”, flexDirection: “column”, overflow: “hidden”, fontFamily: FONT } },
-h(“div”, { style: { flexShrink: 0, display: “flex”, alignItems: “center”, padding: “10px 12px”, gap: 10 } },
-h(Btn, { onClick: function() { setScreen(“draw”); setViewIdx(null); }, style: { width: 36, height: 36 } }, h(BackIcon)),
-h(“span”, { style: { fontSize: 20, color: “#1a1a1a” } }, “Gallery”)
+if (screen === "gallery") {
+return h("div", { style: { width: "100%", height: "100dvh", background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", fontFamily: FONT } },
+h("div", { style: { flexShrink: 0, display: "flex", alignItems: "center", padding: "10px 12px", gap: 10 } },
+h(Btn, { onClick: function() { setScreen("draw"); setViewIdx(null); }, style: { width: 36, height: 36 } }, h(BackIcon)),
+h("span", { style: { fontSize: 20, color: "#1a1a1a" } }, "Gallery")
 ),
 gallery.length === 0
-? h(“div”, { style: { flex: 1, display: “flex”, alignItems: “center”, justifyContent: “center”, color: “#aaa”, fontSize: 16 } }, “Nothing saved yet”)
-: h(“div”, { style: { flex: 1, overflow: “auto”, padding: “0 12px 12px”, display: “grid”, gridTemplateColumns: “repeat(3, 1fr)”, gap: 8 } },
+? h("div", { style: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#aaa", fontSize: 16 } }, "Nothing saved yet")
+: h("div", { style: { flex: 1, overflow: "auto", padding: "0 12px 12px", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 } },
 gallery.map(function(itm, i) {
-return h(“div”, { key: itm.id, onClick: function() { setViewIdx(i); }, style: { aspectRatio: “3/4”, border: “2px solid #1a1a1a”, borderRadius: 4, overflow: “hidden”, cursor: “pointer” } },
-h(“img”, { src: itm.image, alt: “”, style: { width: “100%”, height: “100%”, objectFit: “cover” } })
+return h("div", { key: itm.id, onClick: function() { setViewIdx(i); }, style: { aspectRatio: "3/4", border: "2px solid #1a1a1a", borderRadius: 4, overflow: "hidden", cursor: "pointer" } },
+h("img", { src: itm.image, alt: "", style: { width: "100%", height: "100%", objectFit: "cover" } })
 );
 })
 )
@@ -306,53 +306,53 @@ h(“img”, { src: itm.image, alt: “”, style: { width: “100%”, height: 
 }
 
 // ── DRAWING SCREEN ──
-return h(“div”, { style: { width: “100%”, height: “100dvh”, background: “#fff”, display: “flex”, flexDirection: “column”, overflow: “hidden”, fontFamily: FONT } },
+return h("div", { style: { width: "100%", height: "100dvh", background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", fontFamily: FONT } },
 // canvas
-h(“div”, { style: { flex: 1, display: “flex”, justifyContent: “center”, alignItems: “center”, padding: “8px 8px 0”, minHeight: 0 } },
-h(“canvas”, {
+h("div", { style: { flex: 1, display: "flex", justifyContent: "center", alignItems: "center", padding: "8px 8px 0", minHeight: 0 } },
+h("canvas", {
 ref: canvasRef, width: CANVAS_W, height: CANVAS_H,
 onPointerDown: onDown, onPointerMove: onMove, onPointerUp: onUp, onPointerLeave: onUp,
-style: { maxWidth: “100%”, maxHeight: “100%”, border: “2px solid #1a1a1a”, borderRadius: 4, touchAction: “none”, cursor: “crosshair”, aspectRatio: CANVAS_W + “/” + CANVAS_H }
+style: { maxWidth: "100%", maxHeight: "100%", border: "2px solid #1a1a1a", borderRadius: 4, touchAction: "none", cursor: "crosshair", aspectRatio: CANVAS_W + "/" + CANVAS_H }
 })
 ),
 // toolbar
-h(“div”, { style: { flexShrink: 0, padding: “6px 8px 8px”, display: “flex”, flexDirection: “column”, gap: 6, alignItems: “center” } },
+h("div", { style: { flexShrink: 0, padding: "6px 8px 8px", display: "flex", flexDirection: "column", gap: 6, alignItems: "center" } },
 // row 1: colors
-h(“div”, { style: { display: “flex”, gap: 5, alignItems: “center”, justifyContent: “center” } },
+h("div", { style: { display: "flex", gap: 5, alignItems: "center", justifyContent: "center" } },
 COLORS.map(function(c) {
-var isWhite = c === “#FFFFFF”;
+var isWhite = c === "#FFFFFF";
 var isSelected = isWhite ? erasing : (!erasing && color === c);
-return h(“div”, {
+return h("div", {
 key: c,
 onClick: function() { if (isWhite) { setErasing(true); } else { setColor(c); setErasing(false); } },
-style: { width: 32, height: 32, borderRadius: “50%”, background: c, border: isSelected ? “3px solid #888” : isWhite ? “2px solid #ddd” : “3px solid transparent”, cursor: “pointer”, boxSizing: “border-box” }
+style: { width: 32, height: 32, borderRadius: "50%", background: c, border: isSelected ? "3px solid #888" : isWhite ? "2px solid #ddd" : "3px solid transparent", cursor: "pointer", boxSizing: "border-box" }
 });
 })
 ),
 // row 2: brush sizes + action buttons
-h(“div”, { style: { display: “flex”, gap: 5, alignItems: “center”, justifyContent: “center” } },
+h("div", { style: { display: "flex", gap: 5, alignItems: "center", justifyContent: "center" } },
 SIZES.map(function(s) {
-return h(“div”, {
+return h("div", {
 key: s,
 onClick: function() { setBrushSize(s); },
-style: { width: 32, height: 32, display: “flex”, alignItems: “center”, justifyContent: “center”, border: (brushSize === s ? 2.5 : 1.5) + “px solid “ + (brushSize === s ? “#1a1a1a” : “#ddd”), borderRadius: 4, cursor: “pointer”, boxSizing: “border-box” }
-}, h(“div”, { style: { width: s / 1.1 + 2, height: s / 1.1 + 2, borderRadius: “50%”, background: “#1a1a1a” } }));
+style: { width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", border: (brushSize === s ? 2.5 : 1.5) + "px solid " + (brushSize === s ? "#1a1a1a" : "#ddd"), borderRadius: 4, cursor: "pointer", boxSizing: "border-box" }
+}, h("div", { style: { width: s / 1.1 + 2, height: s / 1.1 + 2, borderRadius: "50%", background: "#1a1a1a" } }));
 }),
-h(Btn, { onClick: undo, title: “Undo”, style: { width: 32, height: 32, opacity: strokes.length === 0 ? 0.3 : 1 } }, h(UndoIcon)),
-h(Btn, { onClick: redo, title: “Redo”, style: { width: 32, height: 32, opacity: redoStack.length === 0 ? 0.3 : 1 } }, h(RedoIcon)),
-h(Btn, { onClick: saveToGallery, title: “Save to Gallery”, style: { width: 32, height: 32, opacity: canvasEmpty ? 0.3 : 1, background: saveFlash ? “#2ecc71” : undefined, color: saveFlash ? “#fff” : undefined, borderColor: saveFlash ? “#2ecc71” : undefined } }, h(SaveIcon)),
-h(Btn, { onClick: downloadToPhotos, title: “Download to Photos”, style: { width: 32, height: 32, opacity: canvasEmpty ? 0.3 : 1, background: shareFlash ? “#3498db” : undefined, color: shareFlash ? “#fff” : undefined, borderColor: shareFlash ? “#3498db” : undefined } }, h(ShareIcon)),
-h(Btn, { onClick: newCanvas, title: “New Canvas”, style: { width: 32, height: 32, opacity: canvasEmpty ? 0.3 : 1 } }, confirmNew ? h(“span”, { style: { fontSize: 9 } }, “Sure?”) : h(PlusIcon)),
-h(Btn, { onClick: function() { setScreen(“gallery”); }, title: “Gallery”, style: { width: 32, height: 32 } }, h(GridIcon))
+h(Btn, { onClick: undo, title: "Undo", style: { width: 32, height: 32, opacity: strokes.length === 0 ? 0.3 : 1 } }, h(UndoIcon)),
+h(Btn, { onClick: redo, title: "Redo", style: { width: 32, height: 32, opacity: redoStack.length === 0 ? 0.3 : 1 } }, h(RedoIcon)),
+h(Btn, { onClick: saveToGallery, title: "Save to Gallery", style: { width: 32, height: 32, opacity: canvasEmpty ? 0.3 : 1, background: saveFlash ? "#2ecc71" : undefined, color: saveFlash ? "#fff" : undefined, borderColor: saveFlash ? "#2ecc71" : undefined } }, h(SaveIcon)),
+h(Btn, { onClick: downloadToPhotos, title: "Download to Photos", style: { width: 32, height: 32, opacity: canvasEmpty ? 0.3 : 1, background: shareFlash ? "#3498db" : undefined, color: shareFlash ? "#fff" : undefined, borderColor: shareFlash ? "#3498db" : undefined } }, h(ShareIcon)),
+h(Btn, { onClick: newCanvas, title: "New Canvas", style: { width: 32, height: 32, opacity: canvasEmpty ? 0.3 : 1 } }, confirmNew ? h("span", { style: { fontSize: 9 } }, "Sure?") : h(PlusIcon)),
+h(Btn, { onClick: function() { setScreen("gallery"); }, title: "Gallery", style: { width: 32, height: 32 } }, h(GridIcon))
 )
 )
 );
 }
 
-if (typeof React === “undefined” || typeof ReactDOM === “undefined”) {
-  document.getElementById(“root”).textContent = “Error: React failed to load.”;
+if (typeof React === "undefined" || typeof ReactDOM === "undefined") {
+  document.getElementById("root").textContent = "Error: React failed to load.";
 } else {
-  ReactDOM.createRoot(document.getElementById(“root”)).render(React.createElement(App));
+  ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
 }
 </script>
 
