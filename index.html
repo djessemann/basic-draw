@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
 <title>Draw</title>
 <meta name="description" content="A simple drawing app"/>
 <meta name="theme-color" content="#1a1a1a"/>
@@ -14,8 +14,14 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png"/>
 <style>
 *{margin:0;padding:0}
-html,body,#root{width:100%;height:100%;overflow:hidden;background:#fff}
-body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+html,body,#root{width:100%;height:100%;overflow:hidden;background:#fff;overscroll-behavior:none;position:fixed;top:0;left:0;right:0;bottom:0}
+body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;touch-action:none}
+@media(min-width:600px){
+:root{--btn-size:44px;--color-size:40px;--gap:8px;--toolbar-pad:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+}
+@media(min-width:900px){
+:root{--btn-size:52px;--color-size:48px;--gap:12px;--toolbar-pad:16px 24px calc(16px + env(safe-area-inset-bottom,0px))}
+}
 </style>
 </head>
 <body>
@@ -272,7 +278,7 @@ shareOrDownload(blob, "drawing-" + Date.now() + ".png");
 // ── GALLERY: single image view ──
 if (screen === "gallery" && viewIdx !== null && gallery[viewIdx]) {
 var item = gallery[viewIdx];
-return h("div", { style: { width: "100%", height: "100dvh", background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", fontFamily: FONT } },
+return h("div", { style: { width: "100%", height: "100dvh", background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", fontFamily: FONT, touchAction: "none" } },
 h("div", { style: { flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px" } },
 h(Btn, { onClick: function() { setViewIdx(null); }, style: { width: 36, height: 36 } }, h(BackIcon)),
 h("div", { style: { display: "flex", gap: 8 } },
@@ -288,14 +294,14 @@ h("img", { src: item.image, alt: "", style: { maxWidth: "100%", maxHeight: "100%
 
 // ── GALLERY: grid view ──
 if (screen === "gallery") {
-return h("div", { style: { width: "100%", height: "100dvh", background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", fontFamily: FONT } },
+return h("div", { style: { width: "100%", height: "100dvh", background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", fontFamily: FONT, touchAction: "none" } },
 h("div", { style: { flexShrink: 0, display: "flex", alignItems: "center", padding: "10px 12px", gap: 10 } },
 h(Btn, { onClick: function() { setScreen("draw"); setViewIdx(null); }, style: { width: 36, height: 36 } }, h(BackIcon)),
 h("span", { style: { fontSize: 20, color: "#1a1a1a" } }, "Gallery")
 ),
 gallery.length === 0
 ? h("div", { style: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#aaa", fontSize: 16 } }, "Nothing saved yet")
-: h("div", { style: { flex: 1, overflow: "auto", padding: "0 12px 12px", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 } },
+: h("div", { style: { flex: 1, overflow: "auto", padding: "0 12px 12px", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, touchAction: "pan-y", overscrollBehavior: "contain" } },
 gallery.map(function(itm, i) {
 return h("div", { key: itm.id, onClick: function() { setViewIdx(i); }, style: { aspectRatio: "3/4", border: "2px solid #1a1a1a", borderRadius: 4, overflow: "hidden", cursor: "pointer" } },
 h("img", { src: itm.image, alt: "", style: { width: "100%", height: "100%", objectFit: "cover" } })
@@ -305,8 +311,18 @@ h("img", { src: itm.image, alt: "", style: { width: "100%", height: "100%", obje
 );
 }
 
+// ── responsive sizes ──
+var isTablet = window.innerWidth >= 600;
+var isLargeTablet = window.innerWidth >= 900;
+var btnS = isLargeTablet ? 52 : isTablet ? 44 : 36;
+var colorS = isLargeTablet ? 48 : isTablet ? 40 : 32;
+var gapS = isLargeTablet ? 12 : isTablet ? 8 : 5;
+
 // ── DRAWING SCREEN ──
-return h("div", { style: { width: "100%", height: "100dvh", background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", fontFamily: FONT } },
+return h("div", {
+onTouchMove: function(e) { if (e.target.tagName !== "CANVAS") e.preventDefault(); },
+style: { width: "100%", height: "100dvh", background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", fontFamily: FONT, touchAction: "none" }
+},
 // canvas
 h("div", { style: { flex: 1, display: "flex", justifyContent: "center", alignItems: "center", padding: "8px 8px 0", minHeight: 0 } },
 h("canvas", {
@@ -316,34 +332,34 @@ style: { maxWidth: "100%", maxHeight: "100%", border: "2px solid #1a1a1a", borde
 })
 ),
 // toolbar
-h("div", { style: { flexShrink: 0, padding: "6px 8px 8px", display: "flex", flexDirection: "column", gap: 6, alignItems: "center" } },
+h("div", { style: { flexShrink: 0, padding: "8px 8px calc(8px + env(safe-area-inset-bottom, 0px))", display: "flex", flexDirection: "column", gap: gapS, alignItems: "center" } },
 // row 1: colors
-h("div", { style: { display: "flex", gap: 5, alignItems: "center", justifyContent: "center" } },
+h("div", { style: { display: "flex", gap: gapS, alignItems: "center", justifyContent: "center", flexWrap: "wrap" } },
 COLORS.map(function(c) {
 var isWhite = c === "#FFFFFF";
 var isSelected = isWhite ? erasing : (!erasing && color === c);
 return h("div", {
 key: c,
 onClick: function() { if (isWhite) { setErasing(true); } else { setColor(c); setErasing(false); } },
-style: { width: 32, height: 32, borderRadius: "50%", background: c, border: isSelected ? "3px solid #888" : isWhite ? "2px solid #ddd" : "3px solid transparent", cursor: "pointer", boxSizing: "border-box" }
+style: { width: colorS, height: colorS, borderRadius: "50%", background: c, border: isSelected ? "3px solid #888" : isWhite ? "2px solid #ddd" : "3px solid transparent", cursor: "pointer", boxSizing: "border-box" }
 });
 })
 ),
 // row 2: brush sizes + action buttons
-h("div", { style: { display: "flex", gap: 5, alignItems: "center", justifyContent: "center" } },
+h("div", { style: { display: "flex", gap: gapS, alignItems: "center", justifyContent: "center", flexWrap: "wrap" } },
 SIZES.map(function(s) {
 return h("div", {
 key: s,
 onClick: function() { setBrushSize(s); },
-style: { width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", border: (brushSize === s ? 2.5 : 1.5) + "px solid " + (brushSize === s ? "#1a1a1a" : "#ddd"), borderRadius: 4, cursor: "pointer", boxSizing: "border-box" }
+style: { width: btnS, height: btnS, display: "flex", alignItems: "center", justifyContent: "center", border: (brushSize === s ? 2.5 : 1.5) + "px solid " + (brushSize === s ? "#1a1a1a" : "#ddd"), borderRadius: 4, cursor: "pointer", boxSizing: "border-box" }
 }, h("div", { style: { width: s / 1.1 + 2, height: s / 1.1 + 2, borderRadius: "50%", background: "#1a1a1a" } }));
 }),
-h(Btn, { onClick: undo, title: "Undo", style: { width: 32, height: 32, opacity: strokes.length === 0 ? 0.3 : 1 } }, h(UndoIcon)),
-h(Btn, { onClick: redo, title: "Redo", style: { width: 32, height: 32, opacity: redoStack.length === 0 ? 0.3 : 1 } }, h(RedoIcon)),
-h(Btn, { onClick: saveToGallery, title: "Save to Gallery", style: { width: 32, height: 32, opacity: canvasEmpty ? 0.3 : 1, background: saveFlash ? "#2ecc71" : undefined, color: saveFlash ? "#fff" : undefined, borderColor: saveFlash ? "#2ecc71" : undefined } }, h(SaveIcon)),
-h(Btn, { onClick: downloadToPhotos, title: "Download to Photos", style: { width: 32, height: 32, opacity: canvasEmpty ? 0.3 : 1, background: shareFlash ? "#3498db" : undefined, color: shareFlash ? "#fff" : undefined, borderColor: shareFlash ? "#3498db" : undefined } }, h(ShareIcon)),
-h(Btn, { onClick: newCanvas, title: "New Canvas", style: { width: 32, height: 32, opacity: canvasEmpty ? 0.3 : 1 } }, confirmNew ? h("span", { style: { fontSize: 9 } }, "Sure?") : h(PlusIcon)),
-h(Btn, { onClick: function() { setScreen("gallery"); }, title: "Gallery", style: { width: 32, height: 32 } }, h(GridIcon))
+h(Btn, { onClick: undo, title: "Undo", style: { width: btnS, height: btnS, opacity: strokes.length === 0 ? 0.3 : 1 } }, h(UndoIcon)),
+h(Btn, { onClick: redo, title: "Redo", style: { width: btnS, height: btnS, opacity: redoStack.length === 0 ? 0.3 : 1 } }, h(RedoIcon)),
+h(Btn, { onClick: saveToGallery, title: "Save to Gallery", style: { width: btnS, height: btnS, opacity: canvasEmpty ? 0.3 : 1, background: saveFlash ? "#2ecc71" : undefined, color: saveFlash ? "#fff" : undefined, borderColor: saveFlash ? "#2ecc71" : undefined } }, h(SaveIcon)),
+h(Btn, { onClick: downloadToPhotos, title: "Download to Photos", style: { width: btnS, height: btnS, opacity: canvasEmpty ? 0.3 : 1, background: shareFlash ? "#3498db" : undefined, color: shareFlash ? "#fff" : undefined, borderColor: shareFlash ? "#3498db" : undefined } }, h(ShareIcon)),
+h(Btn, { onClick: newCanvas, title: "New Canvas", style: { width: btnS, height: btnS, opacity: canvasEmpty ? 0.3 : 1 } }, confirmNew ? h("span", { style: { fontSize: 9 } }, "Sure?") : h(PlusIcon)),
+h(Btn, { onClick: function() { setScreen("gallery"); }, title: "Gallery", style: { width: btnS, height: btnS } }, h(GridIcon))
 )
 )
 );
