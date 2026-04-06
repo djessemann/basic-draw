@@ -12,8 +12,6 @@
 <meta name="apple-mobile-web-app-title" content="Draw"/>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icons/icon-192.png"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0}
 html,body,#root{width:100%;height:100%;overflow:hidden;background:#fff}
@@ -22,14 +20,14 @@ body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 </head>
 <body>
 <div id="root"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="lib/react.min.js"></script>
+<script src="lib/react-dom.min.js"></script>
 <script>
 "use strict";
 var h = React.createElement;
 var useState = React.useState, useRef = React.useRef, useCallback = React.useCallback, useEffect = React.useEffect;
 
-var FONT = “‘Space Mono’, monospace”;
+var FONT = “’SF Mono’, ‘Menlo’, ‘Consolas’, ‘Liberation Mono’, monospace”;
 var COLORS = [”#1a1a1a”,”#e74c3c”,”#e67e22”,”#f1c40f”,”#2ecc71”,”#3498db”,”#9b59b6”,”#e91e8e”,”#FFFFFF”];
 var SIZES = [4, 10, 22];
 var CANVAS_W = 1080;
