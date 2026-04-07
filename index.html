@@ -162,27 +162,10 @@ redrawAll(ctx, strokes);
 
 var getPos = useCallback(function(e) {
 var rect = canvasRef.current.getBoundingClientRect();
-// With object-fit:contain, compute the actual rendered area inside the element
-var elemAspect = rect.width / rect.height;
-var canvasAspect = CANVAS_W / CANVAS_H;
-var renderW, renderH, offsetX, offsetY;
-if (elemAspect > canvasAspect) {
-// letterboxed on sides
-renderH = rect.height;
-renderW = rect.height * canvasAspect;
-offsetX = (rect.width - renderW) / 2;
-offsetY = 0;
-} else {
-// letterboxed on top/bottom
-renderW = rect.width;
-renderH = rect.width / canvasAspect;
-offsetX = 0;
-offsetY = (rect.height - renderH) / 2;
-}
-var sx = CANVAS_W / renderW, sy = CANVAS_H / renderH;
+var sx = CANVAS_W / rect.width, sy = CANVAS_H / rect.height;
 var cx = e.clientX != null ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
 var cy = e.clientY != null ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-return { x: (cx - rect.left - offsetX) * sx, y: (cy - rect.top - offsetY) * sy };
+return { x: (cx - rect.left) * sx, y: (cy - rect.top) * sy };
 }, []);
 
 var onDown = useCallback(function(e) {
@@ -345,7 +328,7 @@ style: { width: "100%", height: "100dvh", background: "#fff", position: "relativ
 h("canvas", {
 ref: canvasRef, width: CANVAS_W, height: CANVAS_H,
 onPointerDown: onDown, onPointerMove: onMove, onPointerUp: onUp, onPointerLeave: onUp,
-style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", touchAction: "none", cursor: "crosshair", objectFit: "contain" }
+style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", touchAction: "none", cursor: "crosshair" }
 }),
 // drawer overlay - positioned at bottom-left over the canvas
 h("div", { style: { position: "absolute", bottom: 0, left: 0, paddingBottom: "env(safe-area-inset-bottom, 0px)", zIndex: 10, pointerEvents: "none" } },
