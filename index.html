@@ -148,6 +148,7 @@ var _bs = useState(SIZES[1]), brushSize = _bs[0], setBrushSize = _bs[1];
 var _er = useState(false), erasing = _er[0], setErasing = _er[1];
 var drawing = useRef(false);
 var _cn = useState(false), confirmNew = _cn[0], setConfirmNew = _cn[1];
+var _dr = useState(false), drawerOpen = _dr[0], setDrawerOpen = _dr[1];
 var _sf = useState(false), saveFlash = _sf[0], setSaveFlash = _sf[1];
 var _shf = useState(false), shareFlash = _shf[0], setShareFlash = _shf[1];
 var canvasEmpty = strokes.length === 0;
@@ -311,12 +312,12 @@ h("img", { src: itm.image, alt: "", style: { width: "100%", height: "100%", obje
 );
 }
 
-// ── responsive sizes ──
+// ── responsive sizes (slightly smaller to fit in drawer) ──
 var isTablet = window.innerWidth >= 600;
 var isLargeTablet = window.innerWidth >= 900;
-var colorS = isLargeTablet ? 48 : isTablet ? 40 : 32;
+var colorS = isLargeTablet ? 42 : isTablet ? 34 : 28;
 var btnS = colorS;
-var gapS = isLargeTablet ? 12 : isTablet ? 8 : 5;
+var gapS = isLargeTablet ? 10 : isTablet ? 6 : 4;
 
 // ── DRAWING SCREEN ──
 return h("div", {
@@ -331,10 +332,17 @@ onPointerDown: onDown, onPointerMove: onMove, onPointerUp: onUp, onPointerLeave:
 style: { maxWidth: "100%", maxHeight: "100%", border: "2px solid #1a1a1a", borderRadius: 4, touchAction: "none", cursor: "crosshair", aspectRatio: CANVAS_W + "/" + CANVAS_H }
 })
 ),
-// toolbar
-h("div", { style: { flexShrink: 0, padding: "8px 8px calc(8px + env(safe-area-inset-bottom, 0px))", display: "flex", flexDirection: "column", gap: gapS, alignItems: "center" } },
+// drawer container
+h("div", { style: { flexShrink: 0, overflow: "hidden", paddingBottom: "env(safe-area-inset-bottom, 0px)" } },
+h("div", { style: {
+display: "flex", alignItems: "stretch",
+transform: drawerOpen ? "translateX(0)" : "translateX(calc(-100% + 32px))",
+transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+} },
+// drawer content (colors + tools)
+h("div", { style: { flexShrink: 0, padding: "6px 4px 6px 8px", display: "flex", flexDirection: "column", gap: gapS, background: "#fff", borderTop: "2px solid #1a1a1a", borderRight: "2px solid #1a1a1a", borderRadius: "0 8px 0 0" } },
 // row 1: colors
-h("div", { style: { display: "flex", gap: gapS, alignItems: "center", justifyContent: "center", flexWrap: "wrap" } },
+h("div", { style: { display: "flex", gap: gapS, alignItems: "center", flexWrap: "wrap" } },
 COLORS.map(function(c) {
 var isWhite = c === "#FFFFFF";
 var isSelected = isWhite ? erasing : (!erasing && color === c);
@@ -346,7 +354,7 @@ style: { width: colorS, height: colorS, borderRadius: "50%", background: c, bord
 })
 ),
 // row 2: brush sizes + action buttons
-h("div", { style: { display: "flex", gap: gapS, alignItems: "center", justifyContent: "center" } },
+h("div", { style: { display: "flex", gap: gapS, alignItems: "center" } },
 SIZES.map(function(s) {
 return h("div", {
 key: s,
@@ -360,6 +368,22 @@ h(Btn, { onClick: saveToGallery, title: "Save to Gallery", style: { width: btnS,
 h(Btn, { onClick: downloadToPhotos, title: "Download to Photos", style: { width: btnS, height: btnS, opacity: canvasEmpty ? 0.3 : 1, background: shareFlash ? "#3498db" : undefined, color: shareFlash ? "#fff" : undefined, borderColor: shareFlash ? "#3498db" : undefined } }, h(ShareIcon)),
 h(Btn, { onClick: newCanvas, title: "New Canvas", style: { width: btnS, height: btnS, opacity: canvasEmpty ? 0.3 : 1 } }, confirmNew ? h("span", { style: { fontSize: 9 } }, "Sure?") : h(PlusIcon)),
 h(Btn, { onClick: function() { setScreen("gallery"); }, title: "Gallery", style: { width: btnS, height: btnS } }, h(GridIcon))
+)
+),
+// toggle arrow button
+h("div", {
+onClick: function() { setDrawerOpen(!drawerOpen); },
+style: {
+flexShrink: 0, width: 32, display: "flex", alignItems: "center", justifyContent: "center",
+cursor: "pointer", userSelect: "none", borderTop: "2px solid #1a1a1a", background: "#fff"
+}
+},
+h("svg", { width: 16, height: 24, viewBox: "0 0 16 24", fill: "none", stroke: "#1a1a1a", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" },
+drawerOpen
+? h("polyline", { points: "11,6 5,12 11,18" })
+: h("polyline", { points: "5,6 11,12 5,18" })
+)
+)
 )
 )
 );
