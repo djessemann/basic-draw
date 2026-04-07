@@ -162,10 +162,27 @@ redrawAll(ctx, strokes);
 
 var getPos = useCallback(function(e) {
 var rect = canvasRef.current.getBoundingClientRect();
-var sx = CANVAS_W / rect.width, sy = CANVAS_H / rect.height;
+// With object-fit:contain, compute the actual rendered area inside the element
+var elemAspect = rect.width / rect.height;
+var canvasAspect = CANVAS_W / CANVAS_H;
+var renderW, renderH, offsetX, offsetY;
+if (elemAspect > canvasAspect) {
+// letterboxed on sides
+renderH = rect.height;
+renderW = rect.height * canvasAspect;
+offsetX = (rect.width - renderW) / 2;
+offsetY = 0;
+} else {
+// letterboxed on top/bottom
+renderW = rect.width;
+renderH = rect.width / canvasAspect;
+offsetX = 0;
+offsetY = (rect.height - renderH) / 2;
+}
+var sx = CANVAS_W / renderW, sy = CANVAS_H / renderH;
 var cx = e.clientX != null ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
 var cy = e.clientY != null ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-return { x: (cx - rect.left) * sx, y: (cy - rect.top) * sy };
+return { x: (cx - rect.left - offsetX) * sx, y: (cy - rect.top - offsetY) * sy };
 }, []);
 
 var onDown = useCallback(function(e) {
@@ -322,18 +339,16 @@ var gapS = isLargeTablet ? 10 : isTablet ? 6 : 4;
 // ── DRAWING SCREEN ──
 return h("div", {
 onTouchMove: function(e) { if (e.target.tagName !== "CANVAS") e.preventDefault(); },
-style: { width: "100%", height: "100dvh", background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", fontFamily: FONT, touchAction: "none" }
+style: { width: "100%", height: "100dvh", background: "#fff", position: "relative", overflow: "hidden", fontFamily: FONT, touchAction: "none" }
 },
-// canvas
-h("div", { style: { flex: 1, display: "flex", justifyContent: "center", alignItems: "center", padding: "calc(8px + env(safe-area-inset-top, 0px)) 8px 0", minHeight: 0 } },
+// canvas - fills entire screen
 h("canvas", {
 ref: canvasRef, width: CANVAS_W, height: CANVAS_H,
 onPointerDown: onDown, onPointerMove: onMove, onPointerUp: onUp, onPointerLeave: onUp,
-style: { maxWidth: "100%", maxHeight: "100%", border: "2px solid #1a1a1a", borderRadius: 4, touchAction: "none", cursor: "crosshair", aspectRatio: CANVAS_W + "/" + CANVAS_H }
-})
-),
-// drawer container - clips content sliding off-screen to the left
-h("div", { style: { flexShrink: 0, overflow: "hidden", paddingBottom: "env(safe-area-inset-bottom, 0px)" } },
+style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", touchAction: "none", cursor: "crosshair", objectFit: "contain" }
+}),
+// drawer overlay - positioned at bottom-left over the canvas
+h("div", { style: { position: "absolute", bottom: 0, left: 0, overflow: "hidden", paddingBottom: "env(safe-area-inset-bottom, 0px)", zIndex: 10 } },
 h("div", { style: {
 display: "flex", alignItems: "stretch",
 transform: drawerOpen ? "translateX(0)" : "translateX(calc(-100% + 44px))",
