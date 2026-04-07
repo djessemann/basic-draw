@@ -331,7 +331,7 @@ onPointerDown: onDown, onPointerMove: onMove, onPointerUp: onUp, onPointerLeave:
 style: { position: "absolute", top: "env(safe-area-inset-top, 0px)", left: 0, width: "100%", height: "calc(100% - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))", touchAction: "none", cursor: "crosshair", borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", boxSizing: "border-box" }
 }),
 // drawer overlay - positioned at bottom-left over the canvas
-h("div", { style: { position: "absolute", bottom: 0, left: 0, paddingBottom: "env(safe-area-inset-bottom, 0px)", zIndex: 10, pointerEvents: "none" } },
+h("div", { style: { position: "absolute", bottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)", left: 0, zIndex: 10, pointerEvents: "none" } },
 h("div", { style: {
 display: "flex", alignItems: "stretch", pointerEvents: "auto",
 transform: drawerOpen ? "translateX(0)" : "translateX(calc(-100% + 44px))",
