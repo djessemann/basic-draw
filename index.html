@@ -50,7 +50,7 @@ var FONT = "'SF Mono', 'Menlo', 'Consolas', 'Liberation Mono', monospace";
 var COLORS = ["#1a1a1a","#e74c3c","#e67e22","#f1c40f","#2ecc71","#3498db","#9b59b6","#e91e8e","#FFFFFF"];
 var SIZES = [4, 10, 22];
 var CANVAS_W = 1080;
-var CANVAS_H = 1440;
+var CANVAS_H = Math.round(CANVAS_W * (window.innerHeight / window.innerWidth));
 var GALLERY_KEY = "simple-draw-gallery";
 
 /* ── icons ── */
@@ -304,7 +304,7 @@ gallery.length === 0
 ? h("div", { style: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#aaa", fontSize: 16 } }, "Nothing saved yet")
 : h("div", { style: { flex: 1, overflow: "auto", padding: "0 12px 12px", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, touchAction: "pan-y", overscrollBehavior: "contain" } },
 gallery.map(function(itm, i) {
-return h("div", { key: itm.id, onClick: function() { setViewIdx(i); }, style: { aspectRatio: "3/4", border: "2px solid #1a1a1a", borderRadius: 4, overflow: "hidden", cursor: "pointer" } },
+return h("div", { key: itm.id, onClick: function() { setViewIdx(i); }, style: { aspectRatio: CANVAS_W + "/" + CANVAS_H, border: "2px solid #1a1a1a", borderRadius: 4, overflow: "hidden", cursor: "pointer" } },
 h("img", { src: itm.image, alt: "", style: { width: "100%", height: "100%", objectFit: "cover" } })
 );
 })
