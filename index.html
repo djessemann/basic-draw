@@ -332,15 +332,15 @@ onPointerDown: onDown, onPointerMove: onMove, onPointerUp: onUp, onPointerLeave:
 style: { maxWidth: "100%", maxHeight: "100%", border: "2px solid #1a1a1a", borderRadius: 4, touchAction: "none", cursor: "crosshair", aspectRatio: CANVAS_W + "/" + CANVAS_H }
 })
 ),
-// drawer container
+// drawer container - clips content sliding off-screen to the left
 h("div", { style: { flexShrink: 0, overflow: "hidden", paddingBottom: "env(safe-area-inset-bottom, 0px)" } },
 h("div", { style: {
 display: "flex", alignItems: "stretch",
-transform: drawerOpen ? "translateX(0)" : "translateX(calc(-100% + 32px))",
+transform: drawerOpen ? "translateX(0)" : "translateX(calc(-100% + 36px))",
 transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
 } },
-// drawer content (colors + tools)
-h("div", { style: { flexShrink: 0, padding: "6px 4px 6px 8px", display: "flex", flexDirection: "column", gap: gapS, background: "#fff", borderTop: "2px solid #1a1a1a", borderRight: "2px solid #1a1a1a", borderRadius: "0 8px 0 0" } },
+// drawer content (colors + tools) - shares border with toggle tab
+h("div", { style: { flexShrink: 0, padding: "8px 6px 8px 8px", display: "flex", flexDirection: "column", gap: gapS, background: "#fff", border: "2px solid #1a1a1a", borderRight: "none", borderRadius: "0 0 0 0" } },
 // row 1: colors
 h("div", { style: { display: "flex", gap: gapS, alignItems: "center", flexWrap: "wrap" } },
 COLORS.map(function(c) {
@@ -370,12 +370,16 @@ h(Btn, { onClick: newCanvas, title: "New Canvas", style: { width: btnS, height: 
 h(Btn, { onClick: function() { setScreen("gallery"); }, title: "Gallery", style: { width: btnS, height: btnS } }, h(GridIcon))
 )
 ),
-// toggle arrow button
+// toggle arrow tab - completes the border on the right side
 h("div", {
 onClick: function() { setDrawerOpen(!drawerOpen); },
 style: {
-flexShrink: 0, width: 32, display: "flex", alignItems: "center", justifyContent: "center",
-cursor: "pointer", userSelect: "none", borderTop: "2px solid #1a1a1a", background: "#fff"
+flexShrink: 0, width: 36, display: "flex", alignItems: "center", justifyContent: "center",
+cursor: "pointer", userSelect: "none",
+background: "#fff",
+border: "2px solid #1a1a1a", borderLeft: "none",
+borderRadius: "0 8px 8px 0",
+boxSizing: "border-box"
 }
 },
 h("svg", { width: 16, height: 24, viewBox: "0 0 16 24", fill: "none", stroke: "#1a1a1a", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" },
