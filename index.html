@@ -15,7 +15,8 @@
 <style>
 *{margin:0;padding:0}
 html,body,#root{width:100%;height:100%;overflow:hidden;background:#fff;overscroll-behavior:none;position:fixed;top:0;left:0;right:0;bottom:0}
-body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;touch-action:none}
+body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;touch-action:none;-webkit-user-select:none;user-select:none}
+canvas{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 @media(min-width:600px){
 :root{--btn-size:44px;--color-size:40px;--gap:8px;--toolbar-pad:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
 }
@@ -27,6 +28,10 @@ body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;touch-ac
 <body>
 <div id="root"></div>
 <script>
+// Prevent text/item selection while drawing
+document.addEventListener("selectstart", function(e) { e.preventDefault(); });
+// Prevent context menu on long-press (iOS/Android)
+document.addEventListener("contextmenu", function(e) { e.preventDefault(); });
 // Clear any stale service workers from previous deploys
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.getRegistrations().then(function(regs) {
@@ -322,13 +327,13 @@ var gapS = isLargeTablet ? 10 : isTablet ? 6 : 4;
 // ── DRAWING SCREEN ──
 return h("div", {
 onTouchMove: function(e) { if (e.target.tagName !== "CANVAS") e.preventDefault(); },
-style: { width: "100%", height: "100dvh", background: "#fff", position: "relative", overflow: "hidden", fontFamily: FONT, touchAction: "none" }
+style: { width: "100%", height: "100dvh", background: "#fff", position: "relative", overflow: "hidden", fontFamily: FONT, touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }
 },
 // canvas - inset from safe areas with hairline border
 h("canvas", {
 ref: canvasRef, width: CANVAS_W, height: CANVAS_H,
 onPointerDown: onDown, onPointerMove: onMove, onPointerUp: onUp, onPointerLeave: onUp,
-style: { position: "absolute", top: "env(safe-area-inset-top, 0px)", left: 0, width: "100%", height: "calc(100% - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))", touchAction: "none", cursor: "crosshair", borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", boxSizing: "border-box" }
+style: { position: "absolute", top: "env(safe-area-inset-top, 0px)", left: 0, width: "100%", height: "calc(100% - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))", touchAction: "none", cursor: "crosshair", borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", boxSizing: "border-box", WebkitUserSelect: "none", userSelect: "none" }
 }),
 // drawer overlay - positioned at bottom-left over the canvas
 h("div", { style: { position: "absolute", bottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)", left: 0, zIndex: 10, pointerEvents: "none" } },
